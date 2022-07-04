@@ -4,7 +4,7 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import { fetchGalleryObj } from './js/fetchGalleryObj';
 import { renderGallery } from './js/renderGallery';
-import { options, galleryOptions, refs} from './js/objOptions';
+import { options, galleryOptions, refs, scrollOptions} from './js/objOptions';
 import throttle from 'lodash.throttle'
 
 
@@ -52,9 +52,18 @@ function smoothScroll(e) {
         top: cardHeight * 2,
         behavior: "smooth",
     });
-}    
+};    
 
+ 
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            console.log("LOADING MOOOR!!!")
+        }
+    });
+}, scrollOptions); 
 
+observer.observe(refs.detectScroll);
 //1) axios запрос данных 2) результирующая функция сабмит 3) функция разметки 4) подключение галлереи 5) бесконечный скрол
 
 //+

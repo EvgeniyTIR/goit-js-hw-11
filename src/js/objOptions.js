@@ -24,4 +24,10 @@ export const refs = {
     form: document.querySelector('#search-form'),
     submit: document.querySelector('.search-form__button'),
     gallery: document.querySelector('.gallery'),
+    detectScroll: document.querySelector('.scroll-detection')
+};
+
+export const scrollOptions = {
+    rootMargin: '500px',
+    threshold: 1.0,
 };
