@@ -2,50 +2,61 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import axios from 'axios';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-import { fetchGalleryObj } from './js/fetchGalleryObj';
+import { fetchGalleryObj } from './js/fetchDataGallery';
 import { renderGallery } from './js/renderGallery';
-import { options, galleryOptions, refs, scrollOptions} from './js/objOptions';
+import { options, galleryOptions, refs, scrollOptions} from './js/settingsAndOptions';
 import throttle from 'lodash.throttle'
 
 
 const throttle = require(`lodash.throttle`);
 const ulr = 'https://pixabay.com/api/';
 axios.defaults.baseURL = ulr;
-
-
+let hits = 0;
 
 refs.form.addEventListener('submit', throttle(submitResult, 500));
  
 async function submitResult(e) {
-    e.preventDefault();    
-    submitReset();
+    e.preventDefault();     
     const { elements: { searchQuery } } = e.currentTarget;
     options.q = searchQuery.value.trim();
     if (options.q === '') { return };
+    submitReset();
     await getAndDrawData();
    // e.currentTarget.reset();
 };
 
 async function getAndDrawData() {
        try {
-        const dataObj = await fetchGalleryObj(options);           
-        if (dataObj.length === 0) {
-          Notify.warning("Sorry, there are no images matching your search query. Please try again.")
+        const dataObj = await fetchGalleryObj(options); 
+           hits = dataObj.totalHits;    
+        if (dataObj.hits.length === 0) {
+            Notify.warning("Sorry, there are no images matching your search query. Please try again.");
         }
-        const markup = dataObj.map(i => renderGallery(i)).join('');
+        const markup = dataObj.hits.map(i => renderGallery(i)).join('');
         refs.gallery.insertAdjacentHTML('beforeend', markup);
         let lightbox = new SimpleLightbox('.gallery a', galleryOptions);;
         lightbox.refresh();
-        return lightbox
-    } catch (error) {      
-        console.log(error.message);
+           return lightbox, dataObj ;
+       } catch (error) {      
+           Notify.failure("Wooops!!! Try again.");
+           console.log(error.message);
     }
      
 };
-
 function submitReset() {
     refs.gallery.innerHTML = '';
-    options.page = 1;   
+    options.page = 1;     
+};
+
+function calcHits() {
+    const totalHits = hits - options.page*options.per_page
+    if (totalHits > 0) {
+        Notify.success(`Hooray! We found ${totalHits} images.`);
+        console.log(`${totalHits} `)
+    }else{ 
+        Notify.warning("We're sorry, but you've reached the end of search results.")
+         console.log(`Wooops`)
+    }
 }
 
 function smoothScroll(e) {
@@ -59,7 +70,7 @@ function smoothScroll(e) {
     });
 };    
 
- 
+ //infinity scroll
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting && options.q !== '') {
@@ -67,8 +78,8 @@ const observer = new IntersectionObserver((entries) => {
             options.page += 1;
             smoothScroll();
             getAndDrawData();
-            
-        }
+            calcHits();
+        };
     });
 }, scrollOptions); 
 
