@@ -22,7 +22,12 @@ async function submitResult(e) {
     const { elements: { searchQuery } } = e.currentTarget;
     options.q = searchQuery.value.trim();
     if (options.q === '') { return };
-    try {
+    await getAndDrawData();
+   // e.currentTarget.reset();
+};
+
+async function getAndDrawData() {
+       try {
         const dataObj = await fetchGalleryObj(options);           
         if (dataObj.length === 0) {
           Notify.warning("Sorry, there are no images matching your search query. Please try again.")
@@ -35,7 +40,7 @@ async function submitResult(e) {
     } catch (error) {      
         console.log(error.message);
     }
-   // e.currentTarget.reset();
+     
 };
 
 function submitReset() {
@@ -57,8 +62,12 @@ function smoothScroll(e) {
  
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            console.log("LOADING MOOOR!!!")
+        if (entry.isIntersecting && options.q !== '') {
+            console.log("LOADING MOOOR!!!");
+            options.page += 1;
+            smoothScroll();
+            getAndDrawData();
+            
         }
     });
 }, scrollOptions); 
