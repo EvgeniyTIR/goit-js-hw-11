@@ -36,7 +36,7 @@ async function getAndDrawData() {
         refs.gallery.insertAdjacentHTML('beforeend', markup);
         let lightbox = new SimpleLightbox('.gallery a', galleryOptions);;
         lightbox.refresh();
-           return lightbox, dataObj ;
+           return lightbox;
        } catch (error) {      
            Notify.failure("Wooops!!! Try find something else.");
            console.log(error.message);
@@ -49,7 +49,7 @@ function submitReset() {
 };
 
 function calcHits() {
-    const totalHits = hits - options.page*options.per_page
+    const totalHits = hits - options.page * options.per_page;
     if (totalHits > 0) {
         Notify.success(`Hooray! We found ${totalHits} images.`);
         console.log(`${totalHits} `)
@@ -59,7 +59,7 @@ function calcHits() {
     }
 }
 
-function smoothScroll(e) {
+function smoothScroll() {
     if (refs.gallery.firstElementChild !== null){
         const { height: cardHeight } = document
             .querySelector(".gallery")
