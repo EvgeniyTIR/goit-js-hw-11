@@ -38,7 +38,7 @@ async function getAndDrawData() {
         lightbox.refresh();
            return lightbox, dataObj ;
        } catch (error) {      
-           Notify.failure("Wooops!!! Try again.");
+           Notify.failure("Wooops!!! Try find something else.");
            console.log(error.message);
     }
      
@@ -60,14 +60,16 @@ function calcHits() {
 }
 
 function smoothScroll(e) {
-    const { height: cardHeight } = document
-        .querySelector(".gallery")
-        .firstElementChild.getBoundingClientRect();
+    if (refs.gallery.firstElementChild !== null){
+        const { height: cardHeight } = document
+            .querySelector(".gallery")
+            .firstElementChild.getBoundingClientRect();
 
-    window.scrollBy({
-        top: cardHeight * 2,
-        behavior: "smooth",
-    });
+        window.scrollBy({
+            top: cardHeight * 2,
+            behavior: "smooth",
+        });
+    }; 
 };    
 
  //infinity scroll
@@ -84,22 +86,3 @@ const observer = new IntersectionObserver((entries) => {
 }, scrollOptions); 
 
 observer.observe(refs.detectScroll);
-//1) axios запрос данных 2) результирующая функция сабмит 3) функция разметки 4) подключение галлереи 5) бесконечный скрол
-
-//+
-//Если бэкенд возвращает пустой массив, 
-// значит ничего подходящего найдено небыло.
-// В таком случае показывай уведомление с текстом
-// "Sorry, there are no images matching your search query.Please try again."
-//Для уведомлений используй библиотеку notiflix.
-
-// В ответе бэкенд возвращает свойство totalHits -
-//     общее количество изображений которые подошли под критерий поиска(для бесплатного аккаунта).
-//     Если пользователь дошел до конца коллекции, пряч кнопку и выводи уведомление с текстом
-// "We're sorry, but you've reached the end of search results.".
-
-// Уведомление
-// После первого запроса при каждом новом поиске выводить уведомление
-//  в котором будет написано сколько всего нашли изображений(свойство totalHits).
-//  Текст уведомления "Hooray! We found totalHits images."
-
