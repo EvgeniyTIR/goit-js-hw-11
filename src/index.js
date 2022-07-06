@@ -40,7 +40,8 @@ async function getAndDrawData() {
 };
 function submitReset() {
     refs.gallery.innerHTML = '';
-    options.page = 1;     
+    options.page = 1; 
+    console.log(options)
 };
 
 function notifyHits(dataObj) {
@@ -54,7 +55,7 @@ function notifyHits(dataObj) {
      }
     if (dataObj.hits.length >= 1 && !lastPage) {
         Notify.success(`Hooray! We found ${dataObj.totalHits} images.`);
-        console.log(`${dataObj.totalHits} Notyfy`)
+        console.log(`${dataObj.totalHits} `)
     }
     
         
@@ -76,7 +77,7 @@ function smoothScroll() {
  //infinity scroll
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting && options.q !== '') {
+        if (entry.isIntersecting && options.q !== '' && document.documentElement.getBoundingClientRect().top!== 0) {
             console.log("LOADING MOOOR!!!");
             options.page += 1;
             smoothScroll();

@@ -28,6 +28,6 @@ export const refs = {
 };
 
 export const scrollOptions = {
-    rootMargin: '500px',
+    rootMargin: '200px',
     threshold: 1.0,
 };
