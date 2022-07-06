@@ -26,7 +26,7 @@ async function submitResult(e) {
 async function getAndDrawData() {
        try {
         const dataObj = await fetchDataGallery(options); 
-        notifyHits(dataObj,options.page);        
+        notifyHits(dataObj);        
         const markup = dataObj.hits.map(i => renderGallery(i)).join('');
         refs.gallery.insertAdjacentHTML('beforeend', markup);
         let lightbox = new SimpleLightbox('.gallery a', galleryOptions);
@@ -45,7 +45,7 @@ function submitReset() {
 
 function notifyHits(dataObj) {
     const lastPage = dataObj.totalHits / options.page < options.per_page;
-    console.log(Math.ceil(dataObj.totalHits / options.page))
+    
     if (dataObj.hits.length >= 0 && lastPage) {
         Notify.warning("We're sorry, but you've reached the end of search results.");
         console.log(`Wooops`);

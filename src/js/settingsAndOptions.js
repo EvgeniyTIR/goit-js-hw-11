@@ -16,7 +16,7 @@ export const options = {
     orientation: 'horizontal',
     safesearch: true,
     per_page: 40,
-    page: 3,
+    page: 1,
 };
 
 export const refs = {
