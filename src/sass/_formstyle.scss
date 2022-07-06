@@ -2,6 +2,9 @@
 :root {
     --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --animation-duration: 250ms;
+    body{
+      background-color: rgb(250, 250, 185);  
+    }
 }
 
 .visually-hidden {
