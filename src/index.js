@@ -47,16 +47,17 @@ function submitReset() {
 function notifyHits(dataObj) {
     const lastPage = dataObj.totalHits / options.page < options.per_page;
     
-    if (dataObj.hits.length >= 0 && lastPage) {
+    if (dataObj.hits.length > 0 && lastPage) {
         Notify.warning("We're sorry, but you've reached the end of search results.");
         console.log(`Wooops`);
-    }else if (dataObj.hits.length === 0) {
+    };
+    if (dataObj.hits.length === 0) {
       Notify.warning("Sorry, there are no images matching your search query. Please try again.");  
-     }
+    };
     if (dataObj.hits.length >= 1 && !lastPage) {
         Notify.success(`Hooray! We found ${dataObj.totalHits} images.`);
         console.log(`${dataObj.totalHits} `)
-    }
+    };
     
         
 }
